@@ -1,14 +1,20 @@
 ﻿@model IEnumerable<SeguridadWeb.EntidadesDeNegocio.Usuario>
 
-@{
-    ViewData["Title"] = "Index";
+@{ ViewData["Title"] = "Index";
     int numPage = 1;
     int numRegistros = 0;
     int numRegistrosPorPage = 10;
     int[] tops = { 10, 20, 50, 100, 500, 1000, 10000, -1 };
     int topActual = Convert.ToInt32(ViewBag.Top);
-    List<SeguridadWeb.EntidadesDeNegocio.Rol> roles = ViewBag.Roles as List<SeguridadWeb.EntidadesDeNegocio.Rol>;
-}
+    List<SeguridadWeb.EntidadesDeNegocio.Rol> roles = ViewBag.Roles as List<SeguridadWeb.EntidadesDeNegocio.Rol>; }
+
+
+
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.22/jquery-ui.js"></script>
+<link rel="Stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/redmond/jquery-ui.css" />
+
 <h1>Buscar</h1>
 <div class="row">
     <div class="col-md-12">
@@ -57,9 +63,16 @@
                             <option selected value="0">SELECCIONAR</option>
                             @foreach (var item in roles)
                             {
-                                <option value="@item.Id">@item.Nombre</option>
-                            }
+                <option value="@item.Id">@item.Nombre</option>
+}
                         </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Rol Busqueda</label>
+                        <input type="text" id="rolname" name="rolname" class="form-control" />
+                        <input type="hidden" id="hfRol" name="RolId" />
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -71,13 +84,13 @@
                                 string strItem = item != -1 ? item.ToString() : "Todos";
                                 if (item != topActual)
                                 {
-                                    <option value="@item">@strItem</option>
-                                }
-                                else
-                                {
-                                    <option selected value="@item">@strItem</option>
-                                }
-                            }
+                <option value="@item">@strItem</option>
+ }
+            else
+            {
+<option selected value="@item">@strItem</option>
+}
+}
                         </select>
                     </div>
                 </div>
@@ -116,71 +129,111 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr data-page="@numPage">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Apellido)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Login)
-                </td>
-                @if (item.Estatus == 1)
-                {
-                    <td>ACTIVO</td>
-                }
+<tr data-page="@numPage">
+    <td>
+        @Html.DisplayFor(modelItem => item.Nombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Apellido)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Login)
+    </td>
+    @if (item.Estatus == 1)
+    {
+<td>ACTIVO</td> }
                 else if (item.Estatus == 2)
                 {
-                    <td>INACTIVO</td>
-                }
+<td>INACTIVO</td> }
                 else
                 {
-                    <td></td>
+<td></td>}
+    <td>
+        @Html.DisplayFor(modelItem => item.Rol.Nombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaRegistro)
+    </td>
+    <td class="botonestabla">
+        @Html.ActionLink("Modificar", "Edit", new { id = item.Id }, new { @class = "btn btn-success" })
+    </td>
+    <td class="botonestabla">
+        @Html.ActionLink("Ver", "Details", new { id = item.Id }, new { @class = "btn btn-info" })
+    </td>
+    <td class="botonestabla">
+        @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+    </td>
+</tr>numRegistros++;
+                if (numRegistros == numRegistrosPorPage)
+                {
+                    numPage++;
+                    numRegistros = 0;
                 }
-                <td>
-                    @Html.DisplayFor(modelItem => item.Rol.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaRegistro)
-                </td>
-                <td class="botonestabla">
-                    @Html.ActionLink("Modificar", "Edit", new { id = item.Id }, new { @class = "btn btn-success" })
-                </td>
-                <td class="botonestabla">
-                    @Html.ActionLink("Ver", "Details", new { id = item.Id }, new { @class = "btn btn-info" })
-                </td>
-                <td class="botonestabla">
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
-                </td>
-            </tr>
-            numRegistros++;
-            if (numRegistros == numRegistrosPorPage)
-            {
-                numPage++;
-                numRegistros = 0;
             }
-        }
-        @{
-            if (numRegistros == 0)
+        @{ if (numRegistros == 0)
             {
                 numPage--;
-            }
-        }
+            } }
     </tbody>
 </table>
 @if (numPage > 1)
 {
-    <div class="row" style="overflow:auto">
-        <div class="col-md-12">
-            <ul class="pagination paginationjs" data-numpage="@numPage" data-pageactive="1">
-                <li class="page-item" data-typepage="Previous"><a class="page-link" href="#">Previous</a></li>
-                @for (var i = 1; i <= numPage; i++)
-                {
-                    <li class="page-item" data-page="@i" data-typepage="Item"><a class="page-link" href="#">@i</a></li>
-                }
-                <li class="page-item" data-typepage="Next"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </div>
+<div class="row" style="overflow:auto">
+    <div class="col-md-12">
+        <ul class="pagination paginationjs" data-numpage="@numPage" data-pageactive="1">
+            <li class="page-item" data-typepage="Previous"><a class="page-link" href="#">Previous</a></li>
+            @for (var i = 1; i <= numPage; i++)
+            {
+<li class="page-item" data-page="@i" data-typepage="Item"><a class="page-link" href="#">@i</a></li>}
+            <li class="page-item" data-typepage="Next"><a class="page-link" href="#">Next</a></li>
+        </ul>
     </div>
+</div>}
+
+@section scripts {
+    <script>
+            @*
+        $(
+                "#rolname").autocomplete({
+            source: '@Url.Action("BuscarRolAutocomplete", "Usuario")',
+            minLength: 2,
+            position: { my: "left bottom", at: "left top" },
+            delay: 500,
+            open: function () {
+                console.log("prueba")
+                $("ul.ui-menu").width($(this).innerWidth());
+            },
+            classes: {
+                "ui-autocomplete": "highlight"
+            }
+        })*@
+
+            $(function () {
+                $("#rolname").autocomplete({
+                    source: function (req, response) {
+                        $.ajax({
+                            url: "/Usuario/BuscarRolAutocomplete/",
+                            data: { "rolname": req.term },
+                            type: "POST",
+                            success: function (data) {
+                                console.log(data)
+                                response($.map(data, function (item) {
+                                    return item.nombre;
+                                }))
+                            },
+                            error: function (response) {
+                                alert(response.responseText);
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            }
+                        });
+                    },
+                    select: function (e, i) {
+                        $("#hfRol").val(i.item.val);
+                    },
+                    minLength: 1
+                })
+            })
+    </script>
 }

@@ -83,5 +83,15 @@ namespace SeguridadWeb.AccesoADatos
             }
             return roles;
         }
+
+        public static async Task<List<Rol>> Autocompletado(Rol pRol)
+        {
+            var roles = new List<Rol>();
+            using (var bdContexto = new BDContexto())
+            {
+                roles = await  bdContexto.Rol.Where(p => p.Nombre.Contains(pRol.Nombre)).ToListAsync();
+            }
+            return roles;
+        }
     }
 }

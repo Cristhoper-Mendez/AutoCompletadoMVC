@@ -38,7 +38,7 @@ namespace SeguridadWeb.UI.AppWebAspCore
             });
             services.AddTransient(sp => new HttpClient
             {
-                BaseAddress = new Uri("https://localhost:44319/api/")
+                BaseAddress = new Uri("http://webapi.darksiders.3hcps.info/api/")
             });
         }
 

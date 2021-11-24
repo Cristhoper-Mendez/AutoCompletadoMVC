@@ -17,6 +17,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 
+using SeguridadWeb.AccesoADatos;
+
 namespace SeguridadWeb.UI.AppWebAspCore.Controllers
 {
     //[Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
@@ -63,6 +65,27 @@ namespace SeguridadWeb.UI.AppWebAspCore.Controllers
             ViewBag.Top = pUsuario.Top_Aux;
             ViewBag.Roles = roles;
             return View(usuarios);
+        }
+
+        public async Task<IActionResult> BuscarRolAutocomplete(string rolname)
+        {
+            var roles = new List<Rol>();
+            Rol rol = new Rol();
+            rol.Nombre = rolname;
+
+            //var resRol = await _httpClient.PostAsJsonAsync("Rol/Buscar", rol);
+
+            //if (resRol.IsSuccessStatusCode)
+            //{
+            //    var bodyRol = await resRol.Content.ReadAsStringAsync();
+            //    roles = JsonSerializer.Deserialize<List<Rol>>(bodyRol,
+            //        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            //        );
+            //}
+
+            roles = await RolDAL.Autocompletado(rol);
+
+            return Json(roles);
         }
 
         // GET: UsuarioController/Details/5
